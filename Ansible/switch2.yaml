@@ -1,0 +1,24 @@
+---
+- name: Configure Switch 2
+  hosts: cisco_switch2
+  gather_facts: no
+  tasks:
+    - name: add vlan 10
+      ios_config:
+        lines:
+          - vlan 10
+          - exit
+    - name: Configure trunk ports
+      ios_config:
+        lines:
+          - switchport mode trunk
+          - exit
+        parents: interface range FastEthernet0/1-3
+    - name: Configure trunk
+      ios_config:
+        lines:
+          - switchport mode trunk
+          - switchport trunk allowed vlan 10
+          - switchport trunk allowed vlan add 100
+          - exit
+        parents: interface FastEthernet0/1

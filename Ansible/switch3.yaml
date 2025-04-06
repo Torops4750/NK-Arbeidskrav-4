@@ -1,0 +1,30 @@
+---
+- name: Configure Switch 3
+  hosts: cisco_switch3
+  gather_facts: no
+  tasks:
+    - name: add vlan
+      ios_config:
+        with_items:
+          - vlan 10
+          - vlan 20
+      #  lines:
+    - name: Configure trunk port
+      ios_config:
+        lines:
+          - switchport mode trunk
+          - switchport trunk allowed vlan 10
+          - switchport trunk allowed vlan add 100
+        parents: interface GigabitEthernet1/0/1
+    - name: configure access port GigabitEthernet1/0/2
+      ios_config:
+        lines:
+          - switchport mode access
+          - switchport access vlan 10
+        parents: interface GigabitEthernet1/0/2
+    - name: configure access port GigabitEthernet1/0/3
+      ios_config:
+        lines: 
+          - switchport mode access
+          - switchport access vlan 20
+        parents: interface GigabitEthernet1/0/3

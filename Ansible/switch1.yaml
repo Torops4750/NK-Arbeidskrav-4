@@ -1,0 +1,11 @@
+---
+- name: Configure switch 1
+  hosts: cisco_switch1
+  gather_facts: no
+  tasks:
+    - name: Configure trunk ports
+      ios_config:
+        lines:
+          - interface range GigabitEthernet1/0/1-2
+          - switchport mode trunk
+          - exit

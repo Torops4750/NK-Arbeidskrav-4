@@ -1,0 +1,26 @@
+---
+- name: Configure dhcp router 1
+  hosts: cisco_router1
+  gather_facts: no
+  tasks:
+    - name: dhcp
+      ios_config:
+        lines:
+          - ip dhcp excluded-address 192.168.10.1 192.168.10.14
+          - ip dhcp excluded-address 192.168.10.134 192.168.10.254
+          - ip dhcp pool vlan10
+          - network 192.168.10.0 255.255.255.0
+          - default-router 192.168.10.1
+          - dns-server 192.168.10.1
+- name: Configure dhcp router 2
+  hosts: cisco_router2
+  gather_facts: no
+  tasks:
+    - name: dhcp
+      ios_config:
+        lines:
+          - ip dhcp excluded-address 192.168.10.1 192.168.10.133
+          - ip dhcp pool vlan10
+          - network 192.168.10.0 255.255.255.0
+          - default-router 192.168.10.1
+          - dns-server 192.168.10.1

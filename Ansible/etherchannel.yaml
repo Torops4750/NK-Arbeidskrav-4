@@ -1,0 +1,14 @@
+---
+- name: 
+  hosts: cisco_switch3
+  gather_facts: no
+  tasks:
+    - name: Configure etherchannel
+      ios_config:
+        lines:
+          - interface range gig1/0/23-24
+          - switchport mode trunk
+          - channel-group 1 mode desirable
+          - exit
+
+

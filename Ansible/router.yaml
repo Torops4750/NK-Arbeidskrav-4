@@ -1,0 +1,110 @@
+---
+- name: Configure router 1
+  hosts: cisco_router1
+  gather_facts: no
+  tasks:
+    - name: Configure interface gig0/0/0
+      ios_config:
+        lines:
+          - no shutdown
+          - exit
+        parents: Interface gig0/0/0
+    - name: Configure interface gig0/0/0.10
+      ios_config:
+        lines:
+          - encapsulation dot1Q 10
+          - ip add 192.168.10.2 255.255.255.0
+          - no shutdown
+          - exit
+        parents: Interface gig0/0/0.10
+    - name: Configure Subinterface gig0/0/0.100
+      ios_config:
+        lines:
+          - encapsulation dot1Q 100
+          - ip add 192.168.100.2 255.255.255.0
+          - no shutdown
+          - exit
+        parents: interface gig0/0/0.100
+    - name: Configure HSRP gig0/0/0.10
+      ios_config:
+        lines:
+          - standby version 2
+          - standby 1 ip 192.168.10.1
+          - standby 1 priority 120
+          - standby 1 preempt
+          - exit
+        parents: Interface gig0/0/0.10
+    - name: Configure HSRP MGMT gig0/0/0.100
+      ios_config:
+        lines:
+          - standby version 2
+          - standby 2 ip 192.168.100.1
+          - standby 2 priority 120
+          - standby 2 preempt
+          - exit
+        parents: interface gig0/0/0.100
+    - name: Configure HSRP MGMT gig0/0/1.100
+      ios_config:
+        lines:
+          - standby version 2
+          - standby 4 ip 192.168.101.1
+          - standby 4 priority 120
+          - standby 4 preempt
+          - exit
+        parents: interface gig0/0/1.100
+    - name: write
+      ios_config:
+        lines:
+          - do write
+
+- name: Configure router 2
+  hosts: cisco_router2
+  gather_facts: no
+  tasks:
+    - name: Configure interface gig0/0/0
+      ios_config:
+        lines:
+          - no shutdown
+          - exit
+        parents: Interface gig0/0/0
+    - name: Configure interface gig0/0/0.10
+      ios_config:
+        lines:
+          - encapsulation dot1Q 10
+          - ip add 192.168.10.3 255.255.255.0
+          - no shutdown
+          - exit
+        parents: Interface gig0/0/0.10
+    - name: Configure Subinterface gig0/0/0.100
+      ios_config:
+        lines:
+          - encapsulation dot1Q 100
+          - ip add 192.168.100.3 255.255.255.0
+          - no shutdown
+          - exit
+        parents: interface gig0/0/0.100
+    - name: Configure HSRP gig0/0/0.10
+      ios_config:
+        lines:
+          - standby version 2
+          - standby 1 ip 192.168.10.1
+          - exit
+        parents: Interface gig0/0/0.10
+    - name: Configure HSRP MGMT gig0/0/0.100
+      ios_config:
+        lines:
+          - standby version 2
+          - standby 2 ip 192.168.100.1
+          - exit
+        parents: interface gig0/0/0.100
+    - name: Configure HSRP MGMT gig0/0/1.100
+      ios_config:
+        lines:
+          - standby version 2
+          - standby 4 ip 192.168.101.1
+          - exit
+        parents: interface gig0/0/1.100
+    - name: write
+      ios_config:
+        lines:
+          - do write
